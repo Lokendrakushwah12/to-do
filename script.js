@@ -1,3 +1,4 @@
+// js for input field
 const input_field = document.querySelector('.input');
 
 document.addEventListener('click', function (e) {
@@ -10,6 +11,8 @@ document.addEventListener('click', function (e) {
     }
 });
 
+
+// js for rating
 const rating = document.querySelector('.rating');
 const logo = document.querySelector('.logo');
 
@@ -21,3 +24,65 @@ rating.addEventListener('click', function () {
         logo.style.transform = " translate(-50%, -50%) scale(0.2)";
     }, 1000);
 });
+
+
+// main js for to do
+let todo = JSON.parse(localStorage.getItem('todo')) || [];
+const todoinput = document.querySelector('#todoinput');
+const add = document.querySelector('.add');
+const del = document.querySelector('.del');
+const todoList = document.querySelector('.todoList');
+const cnter = document.querySelector('.cnter');
+let counter = 0;
+
+document.addEventListener('DOMContentLoaded', function () {
+    todoinput.addEventListener('keydown', function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            addTask();
+        }
+    })
+    add.addEventListener('click', addTask);
+    del.addEventListener('click', delAllTasks);
+    displayTask();
+})
+
+function addTask() {
+    const newTask = todoinput.value.trim();
+    if (newTask.length > 0) {
+        todo.push({
+            text: newTask,
+            disabled: false,
+        });
+        saveToLocalStorage();
+        todoinput.value = "";
+        displayTask();
+        counter = counter + 1;
+        cnter.innerHTML = counter;
+    }
+
+}
+function delAllTasks() {
+
+}
+
+function displayTask() {
+    todoList.innerHTML = "";
+    todo.forEach(function (item, index) {
+        const task = document.createElement('p');
+        task.innerHTML = `
+        <div class="todo-container">
+            <input type="checkbox" id="input-${index}" ${item.disabled ? "checked" : ""} class="todo-checkbox">
+            <p id="todo-${index}" class="${item.disabled ? "disabled" : ""}" onclick="editTask(${index})">${item.text}</p>
+            </div>
+        `;
+        task.querySelector('.todo-checkbox').addEventListener('change', function () {
+            toggleTask(index);
+        });
+        todoList.appendChild(task);
+    });
+}
+
+function saveToLocalStorage() {
+    localStorage.setItem('todo', JSON.stringify(todo));
+}
