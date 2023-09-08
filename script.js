@@ -31,9 +31,11 @@ let todo = JSON.parse(localStorage.getItem('todo')) || [];
 const todoinput = document.querySelector('#todoinput');
 const add = document.querySelector('.add');
 const del = document.querySelector('.del');
-const todoList = document.querySelector('.todoList');
+const todoList = document.querySelector('.scroll');
 const cnter = document.querySelector('.cnter');
-let counter = 0;
+let counter = todo.length;
+
+cnter.innerHTML = counter;
 
 document.addEventListener('DOMContentLoaded', function () {
     todoinput.addEventListener('keydown', function (e) {
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function addTask() {
     const newTask = todoinput.value.trim();
-    if (newTask.length > 0) {
+    if (newTask.length >= 1) {
         todo.push({
             text: newTask,
             disabled: false,
@@ -59,6 +61,8 @@ function addTask() {
         displayTask();
         counter = counter + 1;
         cnter.innerHTML = counter;
+    }else{
+        window.alert("Please enter a task");
     }
 
 }
@@ -73,7 +77,7 @@ function displayTask() {
         task.innerHTML = `
         <div class="todo-container">
             <input type="checkbox" id="input-${index}" ${item.disabled ? "checked" : ""} class="todo-checkbox">
-            <p id="todo-${index}" class="${item.disabled ? "disabled" : ""}" onclick="editTask(${index})">${item.text}</p>
+            <li id="todo-${index}" class="${item.disabled ? "disabled" : ""}" onclick="editTask(${index})">${item.text}</li>
             </div>
         `;
         task.querySelector('.todo-checkbox').addEventListener('change', function () {
