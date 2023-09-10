@@ -66,9 +66,6 @@ function addTask() {
     }
 
 }
-function delAllTasks() {
-
-}
 
 function displayTask() {
     todoList.innerHTML = "";
@@ -85,6 +82,18 @@ function displayTask() {
         });
         todoList.appendChild(task);
     });
+}
+
+function toggleTask(index) {
+  todo[index].disabled = !todo[index].disabled;
+  saveToLocalStorage();
+  displayTasks();
+}
+
+function delAllTasks() {
+  todo = [];
+  saveToLocalStorage();
+  displayTasks();
 }
 
 function saveToLocalStorage() {
